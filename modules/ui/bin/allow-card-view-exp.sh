@@ -10,3 +10,4 @@ echo Assigning user to null bucket for experiment CardViewTest
 curl -u ${WASABI_LOGIN} -H "Content-Type: application/json" -X PUT -d '{"assignment":null, "overwrite": true }' ${WASABI_SERVER}/assignments/applications/${APP_NAME}/experiments/CardViewTest/users/$user
 echo Assigned user
 
+
