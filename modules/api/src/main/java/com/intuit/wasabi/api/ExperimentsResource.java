@@ -23,6 +23,7 @@ import com.google.inject.name.Named;
 import com.intuit.wasabi.analyticsobjects.Parameters;
 import com.intuit.wasabi.api.pagination.PaginationHelper;
 import com.intuit.wasabi.assignment.Assignments;
+import com.intuit.wasabi.assignment.cache.AssignmentsMetadataCache;
 import com.intuit.wasabi.authenticationobjects.UserInfo;
 import com.intuit.wasabi.authenticationobjects.UserInfo.Username;
 import com.intuit.wasabi.authorization.Authorization;
@@ -127,6 +128,7 @@ public class ExperimentsResource {
     private Pages pages;
     private Priorities priorities;
     private Favorites favorites;
+    private AssignmentsMetadataCache cache;
 
     @Inject
     ExperimentsResource(final Experiments experiments, final EventsExport export, final Assignments assignments,
@@ -134,8 +136,8 @@ public class ExperimentsResource {
                         final Pages pages, final Priorities priorities, final Favorites favorites,
                         final @Named(DEFAULT_TIME_ZONE) String defaultTimezone,
                         final @Named(DEFAULT_TIME_FORMAT) String defaultTimeFormat,
-                        final HttpHeader httpHeader, final PaginationHelper<Experiment> experimentPaginationHelper
-    ) {
+                        final HttpHeader httpHeader, final PaginationHelper<Experiment> experimentPaginationHelper,
+                        AssignmentsMetadataCache cache) {
         this.experiments = experiments;
         this.export = export;
         this.assignments = assignments;
@@ -149,6 +151,7 @@ public class ExperimentsResource {
         this.httpHeader = httpHeader;
         this.experimentPaginationHelper = experimentPaginationHelper;
         this.favorites = favorites;
+        this.cache = cache;
     }
 
     /**
@@ -812,6 +815,11 @@ public class ExperimentsResource {
             authorization.checkUserPermissions(userName, experiment.getApplicationName(), UPDATE);
 
             UserInfo user = authorization.getUserInfo(userName);
+
+
+            if (desiredState == Bucket.State.EMPTY) {
+                cache.invalidateExpCache(experimentID);
+            }
 
             Bucket bucket = buckets.updateBucketState(experimentID, bucketLabel, desiredState, user);
 

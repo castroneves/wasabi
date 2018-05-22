@@ -117,6 +117,11 @@ public class NoopAssignmentsMetadataCacheImpl implements AssignmentsMetadataCach
         return null;
     }
 
+    @Override
+    public void invalidateExpCache(Experiment.ID expId) {
+
+    }
+
     /**
      * @param appName
      * @param pageName
