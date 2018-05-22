@@ -19,6 +19,8 @@ create table experiment (
     is_rapid_experiment boolean,
     user_cap int,
     creatorid text,
+    source_url text,
+    experiment_type text,
     PRIMARY KEY (id)
 );
 
