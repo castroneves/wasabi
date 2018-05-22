@@ -19,6 +19,7 @@ import com.intuit.wasabi.api.pagination.PaginationHelper;
 import com.intuit.wasabi.api.pagination.comparators.impl.ExperimentComparator;
 import com.intuit.wasabi.api.pagination.filters.impl.ExperimentFilter;
 import com.intuit.wasabi.assignment.Assignments;
+import com.intuit.wasabi.assignment.cache.AssignmentsMetadataCache;
 import com.intuit.wasabi.authenticationobjects.UserInfo;
 import com.intuit.wasabi.authorization.Authorization;
 import com.intuit.wasabi.authorizationobjects.Permission;
@@ -79,11 +80,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.argThat;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ExperimentsResourceTest {
@@ -155,8 +152,9 @@ public class ExperimentsResourceTest {
                 .withPayload("")
                 .build();
 
+        AssignmentsMetadataCache cache = mock(AssignmentsMetadataCache.class);
         experimentsResource = new ExperimentsResource(experiments, eventsExport, assignments,
-                authorization, buckets, mutex, pages, priorities, favorites, "US/New York", "YYYY-mm-DD", new HttpHeader("MyApp-???", "600"), paginationHelper);
+                authorization, buckets, mutex, pages, priorities, favorites, "US/New York", "YYYY-mm-DD", new HttpHeader("MyApp-???", "600"), paginationHelper, cache);
         doReturn(Collections.emptyList()).when(favorites).getFavorites(Mockito.any());
     }
 

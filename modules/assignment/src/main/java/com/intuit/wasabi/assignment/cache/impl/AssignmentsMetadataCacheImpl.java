@@ -260,6 +260,20 @@ public class AssignmentsMetadataCacheImpl implements AssignmentsMetadataCache {
         return isNull(bucketList) ? new BucketList() : makeCopy(bucketList);
     }
 
+    @Override
+    public void invalidateExpCache(Experiment.ID expId) {
+        Cache cache = cacheManager.getCache(EXPERIMENT_ID_TO_BUCKET_CACHE.toString());
+        cache.remove(expId);
+        Element val = cache.get(expId);
+        if (!isNull(val)) {
+            throw new IllegalStateException("Cache removal failure");
+        }
+
+
+    }
+
+
+
     /**
      * @param appName
      * @param pageName

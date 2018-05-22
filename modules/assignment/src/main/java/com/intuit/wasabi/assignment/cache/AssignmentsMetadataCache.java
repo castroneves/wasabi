@@ -83,6 +83,8 @@ public interface AssignmentsMetadataCache {
      */
     BucketList getBucketList(Experiment.ID expId);
 
+    void invalidateExpCache(Experiment.ID expId);
+
     /**
      * @param appName
      * @param pageName
